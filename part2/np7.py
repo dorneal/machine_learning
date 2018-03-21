@@ -84,7 +84,7 @@ def classifyNB(vec2Classify, p0Vec, p1Vec, pClass1):
     :param p1Vec: 非侮辱类的条件概率数组
     :param pClass1: 文档属于侮辱类的概率
     :return: 0 - 非侮辱类
-            1  - 侮辱类
+             1  - 侮辱类
     """
     p1 = reduce(lambda x, y: x * y, vec2Classify * p1Vec) * pClass1
     p0 = reduce(lambda x, y: x * y, vec2Classify * p0Vec) * (1.0 - pClass1)

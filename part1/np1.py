@@ -7,18 +7,26 @@
 import numpy as np
 import operator
 
-"""
-函数说明：创建数据集
-"""
-
 
 def create_dataSet():
+    """
+    创建数据集
+    :return:
+    """
     group = np.array([[1, 101], [5, 89], [108, 5], [115, 8]])
     labels = ['爱情片', '爱情片', '动作片', '动作片']
     return group, labels
 
 
 def classify0(inX, dataSet, labels, k):
+    """
+    KNN算法分类器
+    :param inX:  用于分类的数(测试集)
+    :param dataSet: 用于训练的数据(训练集)
+    :param labels: 分类标签
+    :param k: KNN算法参数，选择距离最小的K个点
+    :return:
+    """
     # numpy 函数shape[0]返回dataSet的行数
     dataSetSize = dataSet.shape[0]
     # 在列向量方向上重复inX共1次（横向），行向量方向上重复inX共dataSetSize次(纵向)
