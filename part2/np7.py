@@ -4,6 +4,7 @@
 # Author:黄鹏
 # Time:2018.03.21 15:46
 import numpy as np
+from functools import reduce
 
 
 def loadDataSet():
@@ -75,15 +76,58 @@ def trainNBO(trainMatrix, trainCategory):
     return p0Vect, p1Vect, pAbusive  # 返回属于侮辱类的条件概率
 
 
-if __name__ == '__main__':
-    postingList, classVec = loadDataSet()
-    myVocabList = createVocabList(postingList)
-    print('myVocabList:\n', myVocabList)
+def classifyNB(vec2Classify, p0Vec, p1Vec, pClass1):
+    """
+    朴素贝叶斯分类器分类函数
+    :param vec2Classify: 待分类的词条数组
+    :param p0Vec: 侮辱类的条件概率数组
+    :param p1Vec: 非侮辱类的条件概率数组
+    :param pClass1: 文档属于侮辱类的概率
+    :return: 0 - 非侮辱类
+            1  - 侮辱类
+    """
+    p1 = reduce(lambda x, y: x * y, vec2Classify * p1Vec) * pClass1
+    p0 = reduce(lambda x, y: x * y, vec2Classify * p0Vec) * (1.0 - pClass1)
+    print('p0:', p0)
+    print('p1:', p1)
+    if p1 > p0:
+        return 1
+    else:
+        return 0
+
+
+def testingNB():
+    listOPosts, listClasses = loadDataSet()
+    myVocabList = createVocabList(listOPosts)
     trainMat = []
-    for postingDoc in postingList:
+    for postingDoc in listOPosts:
         trainMat.append(setOfWords2Vec(myVocabList, postingDoc))
-    p0V, p1V, pAb = trainNBO(trainMat, classVec)
-    print('p0V:\n', p0V)
-    print('p1V:\n', p1V)
-    print("classVec:\n", classVec)
-    print("pAb:\n", pAb)
+    p0V, p1V, pAb = trainNBO(np.array(trainMat), np.array(listClasses))
+    testEntry = ['love', 'my', 'dalmation']
+    thisDoc = np.array(setOfWords2Vec(myVocabList, testEntry))
+    if classifyNB(thisDoc, p0V, p1V, pAb):
+        print(testEntry, '属于侮辱类')
+    else:
+        print(testEntry, '属于非侮辱类')
+    testEntry = ['stupid', 'garbage']
+
+    thisDoc = np.array(setOfWords2Vec(myVocabList, testEntry))
+    if classifyNB(thisDoc, p0V, p1V, pAb):
+        print(testEntry, '属于侮辱类')
+    else:
+        print(testEntry, '属于非侮辱类')
+
+
+if __name__ == '__main__':
+    # postingList, classVec = loadDataSet()
+    # myVocabList = createVocabList(postingList)
+    # print('myVocabList:\n', myVocabList)
+    # trainMat = []
+    # for postingDoc in postingList:
+    #     trainMat.append(setOfWords2Vec(myVocabList, postingDoc))
+    # p0V, p1V, pAb = trainNBO(trainMat, classVec)
+    # print('p0V:\n', p0V)
+    # print('p1V:\n', p1V)
+    # print("classVec:\n", classVec)
+    # print("pAb:\n", pAb)
+    testingNB()
