@@ -25,7 +25,7 @@ def classify0(inX, dataSet, labels, k):
     :param dataSet: 用于训练的数据(训练集)
     :param labels: 分类标签
     :param k: KNN算法参数，选择距离最小的K个点
-    :return:
+    :return: 分类结果
     """
     # numpy 函数shape[0]返回dataSet的行数
     dataSetSize = dataSet.shape[0]
@@ -50,7 +50,7 @@ def classify0(inX, dataSet, labels, k):
         # 计算类别次数
         classCount[voteIlabel] = classCount.get(voteIlabel, 0) + 1
     # python3中用items()代替python2中的iteritems()
-    # key=operator.itemgetter(1)根据字典的值进行排序
+    # key = operator.itemgetter(1)根据字典的值进行排序
     # key = operator.itemgetter(0)根据字典的键进行排序
     # reverse降序排序字典
     sortedClassCount = sorted(classCount.items(), key=operator.itemgetter(1), reverse=True)
